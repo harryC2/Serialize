@@ -1,4 +1,3 @@
-
 #pragma once
 #include <vector>
 #include<string>
@@ -112,11 +111,16 @@ namespace ch_utility{
          write(head);
          write_args(args...);
     }
-    void write_args();
+    void write(const Serializable& serializable )
+    {
+        serializable.serialize(*this);
+    }
+    void write_args(){};
 
 
 
     //读 将字节流数据读出来
+    bool read(char * data, int len);
     void read(bool& b);
     void read(char& value);
     void read(int32_t& value);
@@ -135,8 +139,11 @@ namespace ch_utility{
     bool read(std::set<T> & value);
     template <typename T, typename ...Args>
     bool read_args(T & head, Args&... args);
-    bool read_args();
-
+    bool read_args(){};
+    bool read(Serializable& serializable )
+    {
+        return serializable.unserialize(*this);
+    }
 
     template<class T>
      DataStream& operator >>(T&& t)

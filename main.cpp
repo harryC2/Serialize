@@ -6,27 +6,20 @@
 #include<vector>
 
 using namespace ch_utility::serialize;
-using namespace ch_utility::serialize;
 
-class Test:public Serializable
+
+class Test : public Serializable
 {
 private:
     std::string  m_name;
-    ch_utility::serialize::DataStream dsStream;
     int m_age{0};
-    Test();
-    Test(const std::string& name,int age):m_name(name),m_age(age){}
+   
 public:
-    void serialize(ch_utility::serialize::DataStream& daStream)
-    {
+    Test(){};
+    Test(const std::string& name,int age):m_name(name),m_age(age){}
 
-    }
-    bool unSerialize(ch_utility::serialize::DataStream& stream)
-    {
-        return false;
-    }
+    ~Test(){};
     SERIALIZE(m_name,m_age)
-
 };
 
 
@@ -80,13 +73,28 @@ void testStlContain()
     }
 }
 
+void testClassSerializable()
+{
+    Test  test("chenhao",15);
+    DataStream ds;
+    ds<<test;
+    
+    std::string strTem;
+    ds.writeFile(strTem);
+
+    DataStream dsRead;
+    dsRead.readData(strTem);
+    Test testRead;
+    dsRead>>testRead;
+}
 
 
 
 
 int main()
 {
-    testStlContain();
+    testClassSerializable();
+  //  testStlContain();
    // testWrite();
     //testRead();
     return 0;
